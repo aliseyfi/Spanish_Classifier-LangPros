@@ -40,8 +40,27 @@ def process_data(dir_path, category_file_path, output_file_path):
 
     with open(category_file_path) as cf, open(output_file_path, "w") as of:
         cat_reader = csv.reader(cf)
+
+        # Build dict of category counts
+        categories = {}
+        for cat in cat_reader:
+            if cat[1][1:5] == "Wiki":
+                continue
+            elif cat[1][1:-1] not in categories:
+                categories[cat[1][1:-1]] = 1
+            else:
+                categories[cat[1][1:-1]] += 1
+
+        cats = [k for k, v in sorted(
+            categories.items(), key=lambda x: x[1], reverse=True)]
+        cats = cats[:1000]
+
+        cf.seek(0)
         cat_cursor = next(cat_reader)
+
+        # For each file (including those in subfolders)
         for root, dirs, files in os.walk(path):
+            # Go through all files in each subfolder in numerical order
             for fn in sorted(files, key=lambda fn: int(fn[5:])):
                 pages = process_file(root + "/" + fn)
                 for page in pages:
@@ -57,7 +76,7 @@ def process_data(dir_path, category_file_path, output_file_path):
                                 cat_cursor = next(cat_reader, None)
                                 continue
 
-                            if cat_cursor[1][1:5] != "Wiki":
+                            if cat_cursor[1][1:-1] in cats:
                                 to_output = {
                                     "title": page["title"],
                                     "text": page["text"],
