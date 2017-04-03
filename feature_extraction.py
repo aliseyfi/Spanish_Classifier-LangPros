@@ -1,5 +1,6 @@
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 import multiprocessing
+import numpy
 
 class featureExtractor:
 
@@ -8,14 +9,15 @@ class featureExtractor:
         self.number = 0
         self.documents = []
         cores = multiprocessing.cpu_count()
-        self.model = Doc2Vec(dm=1,dm_mean=1,size=200,window=8,min_count=19,iter=10,workers=cores,alpha=0.025, min_alpha=0.025)  # use fixed learning rate
+        self.model = Doc2Vec(dm=1,dm_mean=1,dm_tag_count=1,size=500,window=8,min_count=1,iter=10,workers=cores,alpha=0.025, min_alpha=0.025)  # use fixed learning rate
 
     def addDocument(self, document):
         self.documents.append(document)
 
     #Create a sentence object from
     def createStringObject(self, document):
-        taggedDoc = TaggedDocument(document, "TRAIN_"+str(self.number))
+        prefix_train = str(self.number)
+        taggedDoc = TaggedDocument(document,prefix_train)
         self.number = self.number + 1
         return taggedDoc
 
@@ -39,11 +41,10 @@ class featureExtractor:
 
     #Return numpy array of model
     def fetchFeatureMatrix(self):
-        train_array = numpy.zeros((self.number,200))
+        train_array = numpy.zeros((self.number,500))
 
         for i in range(self.number):
-            prefix_train = "TRAIN_" + str(i)
-            train_array[i] = self.model[prefix_train]
+            train_array[i] = self.model.docvecs[i]
 
         return train_array
 
