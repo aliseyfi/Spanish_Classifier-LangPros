@@ -1,5 +1,6 @@
 import nltk
 import json
+from collections import defaultdict
 import itertools
 from pprint import pprint
 
@@ -14,14 +15,14 @@ with open(r'data\data5.json') as data_file:
 
 # create word list and labels list for each article
 # either feed this to Josh line by line, or create document list of word and label
+
+# corpora object contains a list of words and categories for each article
 corpora = {}
 i = 0
 
-#todo: this isn't quite working just yet, need to get a word list for feature extraction
 for article in data:
+    corpora[i] = {}
     words = nltk.word_tokenize(article['text'])
-
     corpora[i]['words'] = words
     corpora[i]['labels'] = article['category']
-    corpora[i]['title'] = article['title']
     i += 1
