@@ -1,3 +1,5 @@
+# Ari Boyarsky (ariboyarsky@gwu.edu)
+
 import nltk
 import json
 from collections import defaultdict
@@ -17,6 +19,9 @@ with open(r'data\data5.json') as data_file:
 # either feed this to Josh line by line, or create document list of word and label
 
 # corpora object contains a list of words and categories for each article
+# call data[article #]['words'] for a list of words
+# call data[article #]['labels'] for a list of categories
+
 corpora = {}
 i = 0
 
