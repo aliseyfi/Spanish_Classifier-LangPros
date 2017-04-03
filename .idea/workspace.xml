@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/ari_preproccessing.py" line="26" mnemonic="3" />
+    <bookmark url="file://$PROJECT_DIR$/ari_preproccessing.py" line="32" mnemonic="3" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ba8d0f88-bae3-4aaf-a7b9-b7d32c831da6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/ari_preproccessing.py" afterPath="$PROJECT_DIR$/ari_preproccessing.py" />
     </list>
     <ignored path="laClasificacion.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -36,10 +36,10 @@
       <file leaf-file-name="ari_preproccessing.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ari_preproccessing.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.15631692" vertical-offset="173" max-vertical-offset="640">
-              <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.042826552" vertical-offset="0" max-vertical-offset="760">
+              <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding>
-                <element signature="e#0#11#0" expanded="true" />
+                <element signature="e#38#49#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -394,10 +394,10 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/ari_preproccessing.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.15631692" vertical-offset="173" max-vertical-offset="640">
-          <caret line="5" column="9" selection-start-line="5" selection-start-column="9" selection-end-line="5" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.042826552" vertical-offset="0" max-vertical-offset="760">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#38#49#0" expanded="true" />
           </folding>
         </state>
       </provider>
