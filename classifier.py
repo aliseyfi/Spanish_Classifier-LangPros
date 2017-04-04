@@ -60,7 +60,7 @@ if __name__ == '__main__':
     RBFPredictTime = t2-t1
 
     # SVM kernel=linear Classification
-    LinearClassifier = svm.SVC(kernel='linear')
+    LinearClassifier = svm.SVC(kernel='poly')
     t0 = time.time()
     LinearClassifier.fit(trainWikiVectors, trainWikiLabels)
     t1 = time.time()
