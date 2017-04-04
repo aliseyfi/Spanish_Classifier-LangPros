@@ -16,7 +16,7 @@ class featureExtractor:
 
     #Create a sentence object from
     def createStringObject(self, document):
-        prefix_train = str(self.number)
+        prefix_train = [str(self.number)]
         taggedDoc = TaggedDocument(document,prefix_train)
         self.number = self.number + 1
         return taggedDoc
@@ -43,6 +43,7 @@ class featureExtractor:
     def fetchFeatureMatrix(self):
         train_array = numpy.zeros((self.number,500))
 
+        print(len(list(self.model.docvecs)))
         for i in range(self.number):
             train_array[i] = self.model.docvecs[i]
 
