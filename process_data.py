@@ -14,6 +14,7 @@ output_file_path: Where you want the output file.
 
 """
 
+from contextlib import ExitStack
 import csv
 import json
 import os
@@ -40,13 +41,19 @@ def process_data(
 
     page_cursor = 0     # The id of the current page.
 
-    with open(category_file_path) as cf, open(output_file_path, "w") as of:
+    with ExitStack() as stack:
+        cf = stack.enter_context(open(category_file_path))
+        of = stack.enter_context(open(output_file_path + ".json", "w"))
+        csvof = stack.enter_context(
+            open(output_file_path + ".csv", "w", newline=""))
+
         cat_reader = csv.reader(cf)
+        csv_writer = csv.writer(csvof)
 
         # Build dict of category counts
         categories = {}
         for cat in cat_reader:
-            if cat[1][1:5] == "Wiki":
+            if cat[1][1:5] == "Wiki" or ("_" in cat[1]):
                 continue
             elif cat[1][1:-1] not in categories:
                 categories[cat[1][1:-1]] = 1
@@ -112,16 +119,26 @@ def process_data(
                         if (top_cat is not None and
                                 cat_used_pages[top_cat] < pages_per_cat):
 
+                            page_text = page["text"][:1100]
                             to_output = {
                                 "title": page["title"],
-                                "text": page["text"][:1100],
+                                "text": page_text,
                                 "category": top_cat
                             }
                             of.write(json.dumps(to_output) + "\n")
+
+                            page_text = page_text.replace("\n", " ")
+                            page_text = page_text.replace("\t", " ")
+                            csv_writer.writerow([page_text, top_cat])
+
                             cat_used_pages[top_cat] += 1
 
                         cat_cursor = next(cat_reader, None)
 
 
 if __name__ == '__main__':
-    process_data(sys.argv[1], sys.argv[2], sys.argv[3])
+    cat_count = int(sys.argv[4]) if len(sys.argv) >= 4 else 500
+    pages_per_cat = int(sys.argv[5]) if len(sys.argv) >= 5 else 30
+
+    process_data(
+        sys.argv[1], sys.argv[2], sys.argv[3], cat_count, pages_per_cat)
