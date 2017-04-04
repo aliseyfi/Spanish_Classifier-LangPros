@@ -76,7 +76,6 @@ reducedTrainingFeatures = train_pca(pcaVarianceLevel,trainingFeatures)
 ###Train Classifiers (CHRIS)#######################
 ###################################################
 print('##################### TRAINING CLASSIFIERS ############################')
-#TODO: Does the RBF classifier need to have a kernel specified? Same thing with LibLinearClassifier
 
 # SVM kernel=rbf Classification
 RBFClassifier = svm.SVC()
