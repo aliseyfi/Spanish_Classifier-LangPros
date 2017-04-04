@@ -27,7 +27,10 @@ i = 0
 
 for article in data:
     corpora[i] = {}
-    words = nltk.word_tokenize(article['text'])
+    # to test within the guidelines of of bluemix we must limit text to 1024 chars
+    text = article['text'][:1024]
+    text = text.rsplit(' ', 1)[0]
+    words = nltk.word_tokenize(text)
     corpora[i]['words'] = words
     corpora[i]['labels'] = article['category']
     i += 1
