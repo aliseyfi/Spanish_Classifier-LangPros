@@ -1,4 +1,4 @@
-from feature_extraction import featureExtractor
+from feature_extraction2 import featureExtractor
 from feature_reduction import train_pca
 import nltk
 import numpy
@@ -58,7 +58,7 @@ myFeatureExtractor = featureExtractor()
 
 #Begin by iterating over the corpora object
 for i in trainingCorpora:
-    document = myFeatureExtractor.createStringObject(trainingCorpora[i]['words'])
+    document = myFeatureExtractor.createStringObject(trainingCorpora[i]['words'],trainingCorpora[i]['labels'])
     myFeatureExtractor.addDocument(document)
     trainingLabels.append(trainingCorpora[i]['labels'])
 
@@ -66,6 +66,7 @@ for i in trainingCorpora:
 myFeatureExtractor.trainModel()
 trainingFeatures = myFeatureExtractor.fetchFeatureMatrix()
 
+trainingLabels = myFeatureExtractor.labels
 ###################################################
 ###Reduce Features (ELI)###########################
 ###################################################

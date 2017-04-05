@@ -21,5 +21,3 @@ def train_pca(variance_level, data):
     trained_pca = PCA(n_components=num_components)
     transformed_data = trained_pca.fit_transform(data)
     return trained_pca, transformed_data
-
-

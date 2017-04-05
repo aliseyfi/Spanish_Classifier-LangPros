@@ -8,6 +8,8 @@ class featureExtractor:
         #Create empty document list that will be fed into the doc2vec trainer
         self.number = 0
         self.documents = []
+        self.labels = []
+        self.labelSet = set()
         cores = multiprocessing.cpu_count()
         self.model = Doc2Vec(dm=1,dm_mean=1,size=100,window=4,min_count=1,iter=20,workers=cores,alpha=0.1, min_alpha=0.001)  # use fixed learning rate
 
@@ -15,9 +17,10 @@ class featureExtractor:
         self.documents.append(document)
 
     #Create a sentence object from
-    def createStringObject(self, document):
+    def createStringObject(self, document,docLabel):
         prefix_train = [str(self.number)]
-        taggedDoc = TaggedDocument(document,prefix_train)
+        taggedDoc = TaggedDocument(document,[docLabel])
+        self.labelSet.add(docLabel)
         self.number = self.number + 1
         return taggedDoc
 
@@ -34,19 +37,21 @@ class featureExtractor:
             #self.model.min_alpha = self.model.alpha  # fix the learning rate, no decay
 
         #Remove temp training data
-        self.model.delete_temporary_training_data(keep_doctags_vectors=True,keep_inference=True)
+        #self.model.delete_temporary_training_data(keep_doctags_vectors=True,keep_inference=True)
 
         self.model.save("./completedModel.model")
 
 
     #Return numpy array of model
     def fetchFeatureMatrix(self):
-        train_array = numpy.zeros((self.number,100))
+        train_array = numpy.zeros((len(self.labelSet),100))
 
         print(len(list(self.model.docvecs)))
-        for i in range(self.number):
-            train_array[i] = self.model.docvecs[i]
-
+        j=0
+        for i in self.labelSet:
+            train_array[j] = self.model.docvecs[[i]]
+            self.labels.append(i)
+            j=j+1
         return train_array
 
     #Return feature vector for new data

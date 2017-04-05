@@ -50,7 +50,7 @@ myFeatureExtractor.trainModel()
 
 #print(myFeatureExtractor.model.docvecs.index_to_doctag(0))
 #print(myFeatureExtractor.model.most_similar('central'))
-print(myFeatureExtractor.fetchFeatureMatrix())
+#print(myFeatureExtractor.fetchFeatureMatrix())
 
 #Confirm that I can take test data and output a feature vector
-print(myFeatureExtractor.getFeatures(corpora[3]['words']))
+#print(myFeatureExtractor.getFeatures(corpora[3]['words']))
