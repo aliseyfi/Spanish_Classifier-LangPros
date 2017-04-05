@@ -33,8 +33,8 @@ def process_file(file_path):
 
 
 def process_data(
-        dir_path, category_file_path, output_file_path,
-        cat_count=500, pages_per_cat=30):
+        dir_path, category_file_path, subcat_file_path, catinfo_file_path,
+        output_file_path, cat_count=500, pages_per_cat=30):
     path = dir_path
     if path[-1] is not "/":
         path += "/"
@@ -43,12 +43,47 @@ def process_data(
 
     with ExitStack() as stack:
         cf = stack.enter_context(open(category_file_path))
+        subcf = stack.enter_context(open(subcat_file_path))
+        catinfo = stack.enter_context(open(catinfo_file_path))
         of = stack.enter_context(open(output_file_path + ".json", "w"))
         csvof = stack.enter_context(
             open(output_file_path + ".csv", "w", newline=""))
 
         cat_reader = csv.reader(cf)
+        subcat_reader = csv.reader(subcf)
+        catinfo_reader = csv.reader(catinfo)
         csv_writer = csv.writer(csvof)
+
+        subcats = {}
+        for subcat in subcat_reader:
+            parent = subcat[1][1:-1]
+            subcat_id = int(subcat[0])
+            if subcat_id in subcats:
+                subcats[subcat_id].append(parent)
+            else:
+                subcats[subcat_id] = [parent]
+        print("SUBCATS " + str(len(subcats)))
+
+        children = {}
+        for info in catinfo_reader:
+            if int(info[0]) in subcats:
+                for parent in subcats[int(info[0])]:
+                    if parent in children:
+                        children[parent].append(info[1][1:-1])
+                    else:
+                        children[parent] = [info[1][1:-1]]
+        print("PARENTS " + str(len(children)))
+        for _ in range(3):
+            for k, values in dict(children).items():
+                is_sub = False
+                for parent, v in dict(children).items():
+                    if k in v:
+                        is_sub = True
+                        children[parent].extend(values)
+                if is_sub and k in children:
+                    del children[k]
+
+            print("LENGTH: " + str(len(children)))
 
         # Build dict of category counts
         categories = {}
@@ -59,6 +94,13 @@ def process_data(
                 categories[cat[1][1:-1]] = 1
             else:
                 categories[cat[1][1:-1]] += 1
+
+        for cat in dict(categories):
+            if cat in children:
+                for child in children[cat]:
+                    print(child + " is a subcat of " + cat)
+                    if child in categories:
+                        categories[cat] += categories[child]
 
         cats = [k for k, v in sorted(
             categories.items(), key=lambda x: x[1], reverse=True)]
@@ -119,7 +161,7 @@ def process_data(
                         if (top_cat is not None and
                                 cat_used_pages[top_cat] < pages_per_cat):
 
-                            page_text = page["text"][:1100]
+                            page_text = page["text"][:1000]
                             to_output = {
                                 "title": page["title"],
                                 "text": page_text,
@@ -137,8 +179,9 @@ def process_data(
 
 
 if __name__ == '__main__':
-    cat_count = int(sys.argv[4]) if len(sys.argv) >= 4 else 500
-    pages_per_cat = int(sys.argv[5]) if len(sys.argv) >= 5 else 30
+    cat_count = int(sys.argv[6]) if len(sys.argv) >= 6 else 500
+    pages_per_cat = int(sys.argv[7]) if len(sys.argv) >= 7 else 30
 
     process_data(
-        sys.argv[1], sys.argv[2], sys.argv[3], cat_count, pages_per_cat)
+        sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5],
+        cat_count, pages_per_cat)
